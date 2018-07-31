@@ -5,28 +5,37 @@ import MovieListPage from "./page/movie/MovieListPage";
 import ImageDetailBrowerPage from "./page/movie/ImageDetailBrowerPage";
 import SearchPage from "./page/movie/SearchPage";
 import ThemePage from "./page/movie/ThemePage";
+import CardStackStyleInterpolator from "react-navigation/src/views/StackView/StackViewStyleInterpolator";
 
 
 const App = StackNavigator({
-    Movie:{
-        screen:MoviePage
+    Movie: {
+        screen: MoviePage
     },
-    MovieDetail:{
-        screen:MovieDetailPage
+    MovieDetail: {
+        screen: MovieDetailPage
     },
-    MovieList:{
-        screen:MovieListPage
+    MovieList: {
+        screen: MovieListPage
     },
-    ImageDetailBrower:{
-        screen:ImageDetailBrowerPage
+    ImageDetailBrower: {
+        screen: ImageDetailBrowerPage
     },
-    Search:{
-        screen:SearchPage
+    Search: {
+        screen: SearchPage
     },
-    Theme:{
-        screen:ThemePage
+    Theme: {
+        screen: ThemePage
     },
 
+}, {
+    navigationOptions: {
+        gesturesEnabled: true,
+    },
+    headerMode: 'screen',
+    transitionConfig: (() => ({
+        screenInterpolator: CardStackStyleInterpolator.forHorizontal
+    }))
 });
 
 export default App

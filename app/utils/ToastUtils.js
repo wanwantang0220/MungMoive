@@ -12,6 +12,6 @@ let show = (data)=>{
             textColor: '#222222',
         })
     }
-}
+};
 
 export {show}

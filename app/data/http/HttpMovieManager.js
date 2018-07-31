@@ -1,7 +1,7 @@
 
 import {Nuknown_Error, NetWork_Request_Error, ErrorAnayle} from './ErrorAnayle'
 import ErrorBean from "./ErrorBean";
-import {insertMovie,queryMovie,deleteMovie} from '../realm/RealmManager'
+// import {insertMovie,queryMovie,deleteMovie} from '../realm/RealmManager'
 import {Base} from '../constant/BaseContant'
 import React from 'react'
 
@@ -29,12 +29,12 @@ export default class HttpMovieManager {
     /*正在热映*/
     getHottingMovie(isInit,start,count) {
         if (!isInit) {
-            let movies = queryMovie();
-            if (movies != null && movies.length>0) {
-                return new Promise((resolve,reject)=>{
-                    resolve(movies[movies.length-1])
-                })
-            }
+            // let movies = queryMovie();
+            // if (movies != null && movies.length>0) {
+            //     return new Promise((resolve,reject)=>{
+            //         resolve(movies[movies.length-1])
+            //     })
+            // }
         }
         return new Promise((resolve,reject) => {
             this.fetchNetData(BaseUrl+Movie_Hoting_Url+"?start="+start+"&count="+count)
@@ -43,8 +43,8 @@ export default class HttpMovieManager {
                         if (data.code != null && typeof data.code == 'number') {
                             reject(ErrorAnayle.getErrorBean(data.code))
                         } else if (data.count != null && data.count>0){
-                            resolve(data)
-                            insertMovie(data)
+                            resolve(data);
+                            // insertMovie(data)
                         } else {
                             reject(ErrorAnayle.getErrorBean(NetWork_Request_Error))
                         }

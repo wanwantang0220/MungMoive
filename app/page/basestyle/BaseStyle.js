@@ -1,5 +1,5 @@
 
-
+import {StyleSheet} from 'react-native';
 const GrayColor = '#9D9D9D';
 const GrayBlackColor = '#666666';
 const White = '#ffffff';

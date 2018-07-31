@@ -13,12 +13,14 @@ export default class NaviBarView extends Component {
 
     render() {
         const naviHeight = (Platform.OS === 'ios') ?
-            20 : 0
+            20 : 0;
         return (
             <View style={{
                 height: naviHeight,
                 backgroundColor: this.props.backgroundColor
-            }}></View>
+            }}>
+
+            </View>
         )
     }
 

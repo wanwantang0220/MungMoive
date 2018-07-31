@@ -20,7 +20,7 @@ const TabOptions = (labal,icon)=>{
             />
         )
     })
-}
+};
 
 const jumpPager = (navigate,page,params) => {
     if (params != null) {
@@ -30,6 +30,6 @@ const jumpPager = (navigate,page,params) => {
     } else {
         navigate(page)
     }
-}
+};
 
 export {TabOptions,jumpPager,width,height}
