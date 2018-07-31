@@ -1,16 +1,18 @@
 import React, {PureComponent} from 'react';
-import {Text, View, StyleSheet, StatusBar, Dimensions, TouchableOpacity, Image} from "react-native";
+import {
+    Text, View, StyleSheet, StatusBar, Dimensions, TouchableOpacity, Image, ScrollView,
+    RefreshControl
+} from "react-native";
 import HttpMovieManager from "../../data/http/HttpMovieManager";
 import {show} from "../../utils/ToastUtils";
 import ErrorBean from "../../data/http/ErrorBean";
+import Swiper from 'react-native-swiper'
 import NaviBarView from "../../widget/NaviBarView";
 import {GrayWhiteColor, Translucent, White, WhiteTextColor} from "../basestyle/BaseStyle";
 import {jumpPager} from "../../utils/Utils";
-// import SplashScreen from "react-native-splash-screen";
-// import {queryThemeColor} from "../../data/realm/RealmManager";
-// import HttpMovieManager from "../../data/http/HttpMovieManager";
-// import {show} from "../../utils/ToastUtils";
-// import ErrorBean from "../../data/http/ErrorBean";
+import TouchableView from "../../widget/TouchableView";
+import StarRating from "react-native-star-rating";
+
 
 const itemHight = 200;
 const moviesCount = 20;
@@ -18,7 +20,7 @@ const {width, height} = Dimensions.get('window');
 
 
 const THEME_PIC = require('../../data/img/icon_theme.png');
-const SEARCH_PIC= require('../../data/img/icon_search.png');
+const SEARCH_PIC = require('../../data/img/icon_search.png');
 export default class MoviePage extends PureComponent {
 
     static navigationOptions = {
@@ -31,7 +33,7 @@ export default class MoviePage extends PureComponent {
             hotMovies: {},
             refreshing: true,
             isInit: false,
-            MainColor: '#28FF28',
+            MainColor: '#0072E3',
         };
         this.httpMovies = new HttpMovieManager();
         this.requestData();
@@ -77,8 +79,8 @@ export default class MoviePage extends PureComponent {
                         <Text style={styles.toolbar_middle_text}>Mung</Text>
                     </View>
                     <TouchableOpacity
-                        onPress={()=>{
-                            jumpPager(this.props.navigation.navigate,"Search",null)
+                        onPress={() => {
+                            jumpPager(this.props.navigation.navigate, "Search", null)
                         }}>
                         <Image
                             source={SEARCH_PIC}
@@ -86,10 +88,142 @@ export default class MoviePage extends PureComponent {
                             tintColor={White}/>
                     </TouchableOpacity>
                 </View>
+                <ScrollView style={styles.scrollview_container}
+                            showsVerticalScrollIndicator={false}
+                            refreshControl={this.refreshControlView()}>
+                    {this.getContentView()}
+                </ScrollView>
             </View>
         )
     }
 
+    refreshControlView() {
+        return (
+            <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={() => {
+                    this.refresh()
+                }}
+                colors={['#ff0000', '#00ff00', '#0000ff']}/>
+        )
+    }
+
+    refresh() {
+        this.setState({
+            refreshing: true
+        });
+        this.requestData();
+    }
+
+
+    getContentView() {
+        if (this.state.isInit) {
+            return (
+                <View style={styles.content_view}>
+                    <View style={styles.middle_view}>
+                        <View style={styles.swiper}>
+                            <Swiper
+                                showsButtons={true}
+                                height={220}
+                                autoplay={true}
+                                autoplayTimeout={5}
+                                dot={<View style={styles.swiper_dot}/>}
+                                activeDot={<View style={styles.swiper_activeDot}/>}
+                                paginationStyle={styles.swiper_pagination}>
+                                {this.swiperChildrenView()}
+                            </Swiper>
+                        </View>
+                    </View>
+
+                </View>
+            )
+        } else {
+            <View style={styles.content_view}/>
+        }
+
+
+    }
+
+
+    swiperChildrenView() {
+        let items = this.getHotMovieDatas(true);
+        if (items != null && items.length > 0) {
+            return items.map((item, i) => {
+                return (
+                    <TouchableView
+                        key={i}
+                        onPress={() => {
+                            jumpPager(this.props.navigation.navigate, 'MovieDetail', item.id)
+                        }}>
+                        <View
+                            style={[styles.swiper_children_view, {backgroundColor: this.state.MainColor}]}>
+                            <Image
+                                style={styles.swiper_children_cover}
+                                source={{uri: item.images.large}}/>
+                            <View style={styles.swiper_children_right}>
+                                <Text style={styles.swiper_children_title}
+                                      numberOfLines={1}>
+                                    {item.title}
+                                </Text>
+                                <View style={styles.swiper_children_director}>
+                                    <Image
+                                        source={{uri: item.directors[0].avatars.small}}
+                                        style={styles.swiper_children_director_img}
+                                    />
+                                    <Text style={styles.swiper_children_director_name}
+                                          numberOfLines={1}>
+                                        {(item.directors[0] != null ? item.directors[0].name : "未知")}
+                                    </Text>
+                                </View>
+                                <View style={styles.swiper_children_casts_view}>
+                                    <Text
+                                        style={styles.swiper_children_casts_text}
+                                        numberOfLines={2}>
+                                        主演: {item.casts.map((data, i) => data.name).join(' ')}
+                                    </Text>
+                                </View>
+                                <View style={styles.swiper_children_genres_view}
+                                      numberOfLines={2}>
+                                    <Text style={styles.swiper_children_genres_text}>{item.collect_count} 看过</Text>
+                                </View>
+                                <View style={styles.swiper_children_rating_view}>
+                                    {/*<StarRating*/}
+                                    {/*disabled={false}*/}
+                                    {/*rating={item.rating.average/2}*/}
+                                    {/*maxStars={5}*/}
+                                    {/*halfStarEnabled={true}*/}
+                                    {/*emptyStar={require('../../data/img/icon_unselect.png')}*/}
+                                    {/*halfStar={require('../../data/img/icon_half_select.png')}*/}
+                                    {/*fullStar={require('../../data/img/icon_selected.png')}*/}
+                                    {/*starStyle={{width: 20, height: 20}}*/}
+                                    {/*selectedStar={(rating)=>{}}/>*/}
+                                    <Text
+                                        style={styles.swiper_children_rating_text}>{item.rating.average.toFixed(1)}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableView>
+                )
+            });
+        }
+    }
+
+    getHotMovieDatas(isBanner) {
+        let items = [];
+        let movieDatas = this.state.hotMovies.subjects;
+        if (movieDatas != null && movieDatas.length > 4) {
+            if (isBanner) {
+                for (let i = 0; i < 4; i++) {
+                    items.push(movieDatas[i]);
+                }
+            } else {
+                for (let i = 4; i < movieDatas.length; i++) {
+                    items.push(movieDatas[i]);
+                }
+            }
+        }
+        return items;
+    }
 
     onChangeTheme() {
         this.setState({
@@ -115,7 +249,7 @@ export default class MoviePage extends PureComponent {
             .then((movies) => {
                 console.log(movies.subjects);
                 let preSubjects = this.state.hotMovies.subjects;
-                if (preSubjects != null && subjects.length > 0) {
+                if (preSubjects != null && preSubjects.length > 0) {
                     preSubjects.filter((item, i) => {
                         return i < moviesCount;
                     }).forEach((item, i) => {
@@ -156,7 +290,7 @@ const styles = StyleSheet.create({
         width: width,
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop:20
+        marginTop: 20
     },
     toolbar_left_img: {
         width: 26,
@@ -196,12 +330,21 @@ const styles = StyleSheet.create({
         height: 220,
     },
     swiper_dot: {
-        backgroundColor: Translucent,
-        width: 16,
-        height: 2,
-        borderRadius: 1,
-        marginLeft: 2,
-        marginRight: 2,
+        // backgroundColor: Translucent,
+        // width: 16,
+        // height: 2,
+        // borderRadius: 1,
+        // marginLeft: 2,
+        // marginRight: 2,
+
+        backgroundColor: 'rgba(0,0,0,.5)',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: 3,
     },
     swiper_activeDot: {
         backgroundColor: WhiteTextColor,
@@ -210,6 +353,15 @@ const styles = StyleSheet.create({
         borderRadius: 1,
         marginLeft: 2,
         marginRight: 2,
+
+        // backgroundColor: '#0072E3',
+        // width: 8,
+        // height: 8,
+        // borderRadius: 4,
+        // marginLeft: 3,
+        // marginRight: 3,
+        // marginTop: 3,
+        // marginBottom: 3,
     },
     swiper_pagination: {
         justifyContent: 'flex-end',
