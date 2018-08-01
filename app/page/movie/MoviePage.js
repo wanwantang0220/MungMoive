@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {
     Text, View, StyleSheet, StatusBar, Dimensions, TouchableOpacity, Image, ScrollView,
-    RefreshControl
+    RefreshControl, FlatList
 } from "react-native";
 import HttpMovieManager from "../../data/http/HttpMovieManager";
 import {show} from "../../utils/ToastUtils";
@@ -12,6 +12,8 @@ import {GrayWhiteColor, Translucent, White, WhiteTextColor} from "../basestyle/B
 import {jumpPager} from "../../utils/Utils";
 import TouchableView from "../../widget/TouchableView";
 import StarRating from "react-native-star-rating";
+import {Cate_Data} from "../../data/constant/BaseContant";
+import LinearGradient from 'react-native-linear-gradient'
 
 
 const itemHight = 200;
@@ -126,13 +128,30 @@ export default class MoviePage extends PureComponent {
                                 showsButtons={true}
                                 height={220}
                                 autoplay={true}
-                                autoplayTimeout={5}
+                                autoplayTimeout={1000}
                                 dot={<View style={styles.swiper_dot}/>}
                                 activeDot={<View style={styles.swiper_activeDot}/>}
                                 paginationStyle={styles.swiper_pagination}>
                                 {this.swiperChildrenView()}
                             </Swiper>
                         </View>
+                        {/*分类栏*/}
+                        <View style={[styles.cate_view, {backgroundColor: this.state.MainColor,}]}>
+                            {this.cateChildrenView()}
+                        </View>
+                    </View>
+                    {/*列表*/}
+                    <View style={styles.flat_view}>
+                        <FlatList
+                            data={this.getHotMovieDatas(false)}
+                            keyExtractor={(item, index) => index}
+                            renderItem={
+                                ({item}) => this.renderItemView(item)
+                            }
+                            getItemLayout={(data, index) => this.getItemLayout(data, index)}
+                            showsVerticalScrollIndicator={false}
+                            numColumns={3}
+                        />
                     </View>
 
                 </View>
@@ -145,6 +164,10 @@ export default class MoviePage extends PureComponent {
     }
 
 
+    /***
+     * 状态栏
+     * @returns {*|{}|Object|Uint8Array|any[]|Int32Array}
+     */
     swiperChildrenView() {
         let items = this.getHotMovieDatas(true);
         if (items != null && items.length > 0) {
@@ -187,16 +210,17 @@ export default class MoviePage extends PureComponent {
                                     <Text style={styles.swiper_children_genres_text}>{item.collect_count} 看过</Text>
                                 </View>
                                 <View style={styles.swiper_children_rating_view}>
-                                    {/*<StarRating*/}
-                                    {/*disabled={false}*/}
-                                    {/*rating={item.rating.average/2}*/}
-                                    {/*maxStars={5}*/}
-                                    {/*halfStarEnabled={true}*/}
-                                    {/*emptyStar={require('../../data/img/icon_unselect.png')}*/}
-                                    {/*halfStar={require('../../data/img/icon_half_select.png')}*/}
-                                    {/*fullStar={require('../../data/img/icon_selected.png')}*/}
-                                    {/*starStyle={{width: 20, height: 20}}*/}
-                                    {/*selectedStar={(rating)=>{}}/>*/}
+                                    <StarRating
+                                        disabled={false}
+                                        rating={item.rating.average / 2}
+                                        maxStars={5}
+                                        halfStarEnabled={true}
+                                        emptyStar={require('../../data/img/icon_unselect.png')}
+                                        halfStar={require('../../data/img/icon_half_select.png')}
+                                        fullStar={require('../../data/img/icon_selected.png')}
+                                        starStyle={{width: 20, height: 20}}
+                                        selectedStar={(rating) => {
+                                        }}/>
                                     <Text
                                         style={styles.swiper_children_rating_text}>{item.rating.average.toFixed(1)}</Text>
                                 </View>
@@ -224,6 +248,87 @@ export default class MoviePage extends PureComponent {
         }
         return items;
     }
+
+    /***
+     * 分类栏
+     */
+    cateChildrenView() {
+        return Cate_Data.map((item, i) => {
+            return (
+                <TouchableView
+                    key={i}
+                    style={styles.cate_children_touchview}
+                    onPress={() => {
+                        jumpPager(this.props.navigation.navigate, 'MovieList', {
+                            index: item.index,
+                            title: item.title
+                        })
+                    }}>
+                    <View style={styles.cate_children_view}>
+                        <LinearGradient
+                            colors={item.colors}
+                            style={styles.cate_children_linear}>
+                            <Image
+                                source={item.icon}
+                                style={styles.cate_children_image}/>
+                        </LinearGradient>
+                        <Text
+                            style={styles.cate_children_text}>
+                            {item.title}
+                        </Text>
+                    </View>
+                </TouchableView>
+            )
+        });
+
+    }
+
+
+    /***
+     * 列表item
+     */
+    renderItemView(item){
+        return (
+            <View style={styles.flat_item}>
+                <TouchableView
+                    style={styles.flat_item_touchableview}
+                    onPress={()=>{
+                        jumpPager(this.props.navigation.navigate,'MovieDetail',item.id)
+                    }}>
+                    <View style={[styles.flat_item_view,{backgroundColor: this.state.MainColor}]}>
+                        <Image
+                            source={{uri:item.images.large}}
+                            style={styles.flat_item_image}/>
+                        <View style={[styles.flat_item_detail,{backgroundColor: this.state.MainColor}]}>
+                            <Text style={styles.flat_item_title}
+                                  numberOfLines={1}>
+                                {item.title}
+                            </Text>
+                            <View style={styles.flat_item_rating_view}>
+                                <StarRating
+                                    disabled={false}
+                                    rating={item.rating.average/2}
+                                    maxStars={5}
+                                    halfStarEnabled={true}
+                                    emptyStar={require('../../data/img/icon_unselect.png')}
+                                    halfStar={require('../../data/img/icon_half_select.png')}
+                                    fullStar={require('../../data/img/icon_selected.png')}
+                                    starStyle={{width: 14, height: 14}}
+                                    selectedStar={(rating)=>{}}/>
+                                <Text style={styles.flat_item_rating_number} numberOfLines={1}>{item.rating.average.toFixed(1)}</Text>
+                            </View>
+                        </View>
+                    </View>
+                </TouchableView>
+            </View>
+        )
+    }
+
+
+    getItemLayout(data, index) {
+        return {length: itemHight,offset: itemHight*index,index}
+    }
+
 
     onChangeTheme() {
         this.setState({
