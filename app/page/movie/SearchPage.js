@@ -231,7 +231,7 @@ export default class SearchPage extends PureComponent {
                                 this.requestData(this.title)
                             }
                         }}>
-                            <Text style={[styles.loading_more_view_text, {color: this.state.MainColor}]}>加载更多评论</Text>
+                            <Text style={[styles.loading_more_view_text, {color: this.state.MainColor}]}>加载更多</Text>
                         </TouchableOpacity>
                     </View>
                 )
