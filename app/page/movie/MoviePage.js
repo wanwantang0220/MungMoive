@@ -145,7 +145,7 @@ export default class MoviePage extends PureComponent {
                     <View style={styles.flat_view}>
                         <FlatList
                             data={this.getHotMovieDatas(false)}
-                            keyExtractor={(item, index) => index}
+                            keyExtractor={(item, index) => index.toString()}
                             renderItem={
                                 ({item}) => this.renderItemView(item)
                             }

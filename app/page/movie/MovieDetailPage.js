@@ -158,7 +158,7 @@ export default class MovieDetailPage extends PureComponent {
                             <Text style={styles.filemaker_text}>影人</Text>
                             <FlatList
                                 data={this.state.movieData.casts}
-                                keyExtractor={(item, index) => index}
+                                keyExtractor={(item, index) => index.toString()}
                                 renderItem={({item}) => (this.getFileMakerItemView(item))}
                                 horizontal={true}
                                 showsHorizontalScrollIndicator={false}
@@ -169,7 +169,7 @@ export default class MovieDetailPage extends PureComponent {
                             <Text style={styles.photos_text}>剧照</Text>
                             <FlatList
                                 data={this.state.photoDatas.photos}
-                                keyExtractor={(item, index) => index}
+                                keyExtractor={(item, index) => index.toString()}
                                 renderItem={({item, index}) => (this.getPhotosItemView(item, index))}
                                 horizontal={true}
                                 showsHorizontalScrollIndicator={false}
@@ -183,7 +183,7 @@ export default class MovieDetailPage extends PureComponent {
                             <View style={styles.commentary_flatlist_view}>
                                 <FlatList
                                     data={this.state.commentaryDatas.comments}
-                                    keyExtractor={(item, index) => index}
+                                    keyExtractor={(item, index) => index.toString()}
                                     renderItem={({item}) => (this.getCommentaryItemView(item))}
                                     showsVerticalScrollIndicator={false}
                                 />
@@ -522,6 +522,7 @@ const styles = {
     container: {
         flex: 1,
         backgroundColor: MainBg,
+        marginTop: 20
     },
     header_view: {
         width: width,

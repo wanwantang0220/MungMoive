@@ -158,7 +158,7 @@ export default class SearchPage extends PureComponent {
                         {/*列表栏*/}
                         <FlatList
                             data={this.state.searchDatas.subjects}
-                            keyExtractor={(item, index) => index}
+                            keyExtractor={(item, index) => index.toString()}
                             renderItem={({item, index}) => this.renderItemView(item, index)}
                             getItemLayout={(data, index) => this.getItemLayout(data, index)}
                             showsVerticalScrollIndicator={false}/>

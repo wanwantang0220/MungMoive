@@ -4,3 +4,4 @@
 /** @namespace item.created_at */
 /** @namespace data.photos */
 /** @namespace this.refs.textinput */
+/** @namespace movies.subjects */

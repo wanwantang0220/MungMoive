@@ -106,7 +106,7 @@ export default class Theme extends Component {
                 <View style={styles.flat_view}>
                     <FlatList
                         data = {Theme_Datas}
-                        keyExtractor={(item,index)=>index}
+                        keyExtractor={(item,index)=>index.toString()}
                         renderItem={
                             ({item}) => this._renderItemView(item)
                         }
