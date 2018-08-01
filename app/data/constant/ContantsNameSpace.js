@@ -3,3 +3,4 @@
 /** @namespace item.author.avatar */
 /** @namespace item.created_at */
 /** @namespace data.photos */
+/** @namespace this.refs.textinput */

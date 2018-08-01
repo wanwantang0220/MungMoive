@@ -386,7 +386,7 @@ export default class MoviePage extends PureComponent {
 }
 
 
-const styles = StyleSheet.create({
+const styles = {
     container: {
         flex: 1,
         backgroundColor: '#f5f5f5'
@@ -622,4 +622,4 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         marginLeft: 4,
     },
-});
+};
