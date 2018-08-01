@@ -10,11 +10,15 @@ import {
     Platform
 } from 'react-native';
 
+
+import PropTypes from 'prop-types';
+
 const ScrollViewPropTypes = ScrollView.propTypes;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const DEFAULT_WINDOW_MULTIPLIER = 0.50;
 const DEFAULT_NAVBAR_HEIGHT = (Platform.OS === 'ios') ? 56+20 : 56; //解觉iOS通知栏透明问题
+
 
 class ParallaxScrollView extends Component {
     constructor() {
@@ -165,14 +169,14 @@ ParallaxScrollView.defaultProps = {
 
 ParallaxScrollView.propTypes = {
     ...ScrollViewPropTypes,
-    windowHeight: React.PropTypes.number,
-    navBarTitle: React.PropTypes.string,
-    navBarTitleColor: React.PropTypes.string,
-    navBarColor: React.PropTypes.string,
-    userTitle: React.PropTypes.string,
-    headerView: React.PropTypes.node,
-    leftView: React.PropTypes.element,
-    rightView: React.PropTypes.element
+    windowHeight: PropTypes.number,
+    navBarTitle: PropTypes.string,
+    navBarTitleColor: PropTypes.string,
+    navBarColor: PropTypes.string,
+    userTitle: PropTypes.string,
+    headerView: PropTypes.node,
+    leftView: PropTypes.element,
+    rightView: PropTypes.element
 };
 
 var styles = StyleSheet.create({

@@ -152,6 +152,8 @@ const Theme_Datas = [
         color:'#483D8B',
         name: 'DarkSlateBlue',
     },
-]
+];
 
-export {Base,App_Name,Cate_Data,Default_Photos,Movie_Types,Theme_Datas}
+const  MainColor = '#0072E3';
+
+export {Base,App_Name,Cate_Data,Default_Photos,Movie_Types,Theme_Datas,MainColor}

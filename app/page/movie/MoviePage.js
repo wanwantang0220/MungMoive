@@ -14,6 +14,7 @@ import TouchableView from "../../widget/TouchableView";
 import StarRating from "react-native-star-rating";
 import {Cate_Data} from "../../data/constant/BaseContant";
 import LinearGradient from 'react-native-linear-gradient'
+import {MainColor} from "../../data/constant/BaseContant";
 
 
 const itemHight = 200;
@@ -35,7 +36,7 @@ export default class MoviePage extends PureComponent {
             hotMovies: {},
             refreshing: true,
             isInit: false,
-            MainColor: '#0072E3',
+            MainColor:MainColor,
         };
         this.httpMovies = new HttpMovieManager();
         this.requestData();
