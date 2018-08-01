@@ -23,17 +23,17 @@ export default class MovieListPage extends  PureComponent{
 
     static navigationOptions = {
         header: null,
-    }
+    };
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state={
             isInitSuccess: true,
             movieData:{},
             refreshing: true,
             MainColor: MainColor,
-        }
+        };
         this.index = this.props.navigation.state.params.data.index;
         this.httpMovies = new HttpMovieManager();
         this.requestData()
@@ -92,11 +92,11 @@ export default class MovieListPage extends  PureComponent{
             })
     }
 
-    _getItemLayout(data, index) {
+    getItemLayout(data, index) {
         return {length: itemHight,offset: itemHight*index,index}
     }
 
-    _renderItemView(item){
+    renderItemView(item){
         return (
             <TouchableView onPress={()=>{
                 jumpPager(this.props.navigation.navigate,'MovieDetail',item.id)
@@ -129,7 +129,7 @@ export default class MovieListPage extends  PureComponent{
         )
     }
 
-    _refreshControlView() {
+    refreshControlView() {
         return (
             <RefreshControl
                 refreshing={this.state.refreshing}
@@ -166,7 +166,7 @@ export default class MovieListPage extends  PureComponent{
                 ):(
                     <LinearGradient style={styles.loading_view} colors={[this.state.MainColor,WhiteTextColor]}>
                         <TouchableOpacity onPress={()=>{
-                            this.setState({isInitSuccess:true})
+                            this.setState({isInitSuccess:true});
                             this.requestData()}}>
                             <Text style={[styles.reload_view,{color: this.state.MainColor, borderColor:this.state.MainColor}]}>reloading</Text>
                         </TouchableOpacity>
@@ -202,9 +202,9 @@ export default class MovieListPage extends  PureComponent{
                     <FlatList
                         data = {this.state.movieData.subjects}
                         keyExtractor={(item,index)=>index.toString()}
-                        renderItem={({item}) => this._renderItemView(item)}
-                        refreshControl={this._refreshControlView()}
-                        getItemLayout={(data,index)=> this._getItemLayout(data,index)}
+                        renderItem={({item}) => this.renderItemView(item)}
+                        refreshControl={this.refreshControlView()}
+                        getItemLayout={(data,index)=> this.getItemLayout(data,index)}
                         showsVerticalScrollIndicator={false}/>
                 </View>
             )

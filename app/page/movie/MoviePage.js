@@ -341,7 +341,7 @@ export default class MoviePage extends PureComponent {
     requestData() {
         let start = 0;
         if (this.state.hotMovies.start != null) {
-            start = this.state.hotMovies.state + 2;
+            start = this.state.hotMovies.start + 2;
             if (this.state.hotMovies.total <= this.state.hotMovies.start) {
                 this.setState({
                     refreshing: false,
