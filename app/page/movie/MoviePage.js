@@ -36,7 +36,7 @@ export default class MoviePage extends PureComponent {
             hotMovies: {},
             refreshing: true,
             isInit: false,
-            MainColor:MainColor,
+            MainColor: MainColor,
         };
         this.httpMovies = new HttpMovieManager();
         this.requestData();
@@ -171,6 +171,7 @@ export default class MoviePage extends PureComponent {
      */
     swiperChildrenView() {
         let items = this.getHotMovieDatas(true);
+
         if (items != null && items.length > 0) {
             return items.map((item, i) => {
                 return (
@@ -288,19 +289,19 @@ export default class MoviePage extends PureComponent {
     /***
      * 列表item
      */
-    renderItemView(item){
+    renderItemView(item) {
         return (
             <View style={styles.flat_item}>
                 <TouchableView
                     style={styles.flat_item_touchableview}
-                    onPress={()=>{
-                        jumpPager(this.props.navigation.navigate,'MovieDetail',item.id)
+                    onPress={() => {
+                        jumpPager(this.props.navigation.navigate, 'MovieDetail', item.id)
                     }}>
-                    <View style={[styles.flat_item_view,{backgroundColor: this.state.MainColor}]}>
+                    <View style={[styles.flat_item_view, {backgroundColor: this.state.MainColor}]}>
                         <Image
-                            source={{uri:item.images.large}}
+                            source={{uri: item.images.large}}
                             style={styles.flat_item_image}/>
-                        <View style={[styles.flat_item_detail,{backgroundColor: this.state.MainColor}]}>
+                        <View style={[styles.flat_item_detail, {backgroundColor: this.state.MainColor}]}>
                             <Text style={styles.flat_item_title}
                                   numberOfLines={1}>
                                 {item.title}
@@ -308,15 +309,17 @@ export default class MoviePage extends PureComponent {
                             <View style={styles.flat_item_rating_view}>
                                 <StarRating
                                     disabled={false}
-                                    rating={item.rating.average/2}
+                                    rating={item.rating.average / 2}
                                     maxStars={5}
                                     halfStarEnabled={true}
                                     emptyStar={require('../../data/img/icon_unselect.png')}
                                     halfStar={require('../../data/img/icon_half_select.png')}
                                     fullStar={require('../../data/img/icon_selected.png')}
                                     starStyle={{width: 14, height: 14}}
-                                    selectedStar={(rating)=>{}}/>
-                                <Text style={styles.flat_item_rating_number} numberOfLines={1}>{item.rating.average.toFixed(1)}</Text>
+                                    selectedStar={(rating) => {
+                                    }}/>
+                                <Text style={styles.flat_item_rating_number}
+                                      numberOfLines={1}>{item.rating.average.toFixed(1)}</Text>
                             </View>
                         </View>
                     </View>
@@ -327,7 +330,7 @@ export default class MoviePage extends PureComponent {
 
 
     getItemLayout(data, index) {
-        return {length: itemHight,offset: itemHight*index,index}
+        return {length: itemHight, offset: itemHight * index, index}
     }
 
 
